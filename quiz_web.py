@@ -1,16 +1,18 @@
 import csv
 from collections import namedtuple
+from pathlib import Path
 
 from flask import Flask, render_template
 
 app = Flask(__name__)
 
 Quizset = namedtuple('Quizset', 'filename title')
+quiz_dir = Path(__file__).parent.resolve() / 'quiz'
 
 
 @app.route("/")
 def index():
-    with open('quiz/index.txt', newline='', encoding='utf-8-sig') as f:
+    with open(quiz_dir / 'index.txt', newline='', encoding='utf-8-sig') as f:
         rows = csv.reader(f, delimiter='\t')
         sets = [Quizset(*row) for row in rows]
 
@@ -18,4 +20,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
