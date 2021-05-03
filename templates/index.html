@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>一覧</h3>
+<ul>
+{% for set in sets %}
+    <li>{{ set.filename}} : {{ set.title }}</li>
+{% endfor %}
+</ul>
+{% endblock %}
