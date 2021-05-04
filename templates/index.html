@@ -1,9 +1,44 @@
 {% extends "base.html" %}
+
+{% block custom_header %}
+<style type="text/css">
+button {
+    font-size: 0.8em;
+}
+.description {
+    font-size: 0.9em;
+    margin-left: 10px;
+}
+.button_cell {
+    white-space: nowrap;
+    vertical-align: top;
+    padding-left: 10px;
+}
+</style>
+{% endblock %}
+
 {% block content %}
-<h3>一覧</h3>
-<ul>
-{% for set in sets %}
-    <li>{{ set.filename}} : {{ set.title }}</li>
+<h2>一覧</h2>
+<table>
+{% for qset in qsets %}
+    {% if not loop.first %}
+        <tr><td height="5px"></td></tr>
+    {% endif %}
+    <tr>
+    <td>{{ qset.title }}</td>
+    <td class="button_cell">
+        <button>最初から</button>
+        <button>ランダム</button>
+        <a href="{{ url_for('quiz_set', qset_idx=loop.index0) }}">
+            <button>リスト</button>
+        </a>
+    </td>
+    </tr>
+    {% if qset.description %}
+        <tr><td colspan="2">
+        <div class="description">{{ qset.description }}</div>
+        </td></tr>
+    {% endif %}
 {% endfor %}
-</ul>
+</table>
 {% endblock %}

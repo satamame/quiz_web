@@ -1,2 +1,0 @@
-sample_01.txt	サンプル01
-sample_02.txt	サンプル02

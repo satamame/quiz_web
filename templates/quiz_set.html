@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block custom_header %}
+<style type="text/css">
+.index_cell {
+    white-space: nowrap;
+    vertical-align: top;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>{{ qset.title }}</h2>
+<table>
+{% for quiz in qset_data %}
+    <tr>
+    <td class="index_cell">{{loop.index}}.</td>
+    <td>{{ quiz.question }}</td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}
