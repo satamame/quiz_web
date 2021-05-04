@@ -1,4 +1,5 @@
 import csv
+import random
 from collections import namedtuple
 from pathlib import Path
 
@@ -30,23 +31,48 @@ def get_qset_data(filename):
 
 
 @app.route('/')
-def index():
+def index_page():
     """インデックスページを返す
     """
-    title = 'Quiz Web - Index'
+    title = 'Quiz Web - クイズ集一覧'
     return render_template('index.html', title=title, qsets=get_qsets())
 
 
 @app.route('/qset/<int:qset_idx>')
-def quiz_set(qset_idx=0):
-    """クイズ集のクイズ一覧を返す
+def qset_page(qset_idx):
+    """クイズ集のクイズ一覧ページを返す
     """
+    # インデックスを元にクイズ集とそのデータを取得する
     qset = get_qsets()[qset_idx]
     qset_data = get_qset_data(qset.filename)
+
+    # ページを返す
     title = f'Quiz Web - {qset.title}'
     return render_template(
-        'quiz_set.html', title=title,
+        'qset.html', title=title,
         qset_idx=qset_idx, qset=qset, qset_data=qset_data)
+
+
+@app.route('/q/<int:qset_idx>/<quiz_idx>')
+def quiz_page(qset_idx, quiz_idx):
+    """クイズページを返す
+    """
+    # インデックスを元にクイズ集とそのデータを取得する
+    qset = get_qsets()[qset_idx]
+    qset_data = get_qset_data(qset.filename)
+
+    # quiz_idx が -1 ならランダムにする
+    quiz_idx = int(quiz_idx)
+    if quiz_idx < 0:
+        quiz_idx = random.randint(0, len(qset_data) - 1)
+
+    # TODO: 選択肢をランダムに並べ替え、正解のインデックスをテンプレートに渡す
+
+    quiz = qset_data[quiz_idx]
+    title = f'Quiz Web - {qset.title} [{quiz_idx + 1}]'
+    return render_template(
+        'quiz.html', title=title,
+        qset_idx=qset_idx, qset=qset, quiz_idx=quiz_idx, quiz=quiz)
 
 
 if __name__ == "__main__":

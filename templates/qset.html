@@ -10,12 +10,17 @@
 {% endblock %}
 
 {% block content %}
+<div style="float: right;"><a href="{{ url_for('index_page') }}">トップ</a></div>
 <h2>{{ qset.title }}</h2>
+
 <table>
 {% for quiz in qset_data %}
     <tr>
-    <td class="index_cell">{{loop.index}}.</td>
-    <td>{{ quiz.question }}</td>
+    <td class="index_cell">[{{loop.index}}]</td>
+    <td>
+    <a href="{{ url_for('quiz_page', qset_idx=qset_idx, quiz_idx=loop.index0) }}">
+        {{ quiz.question }}</a>
+    </td>
     </tr>
 {% endfor %}
 </table>
