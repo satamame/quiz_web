@@ -13,7 +13,7 @@
 <div style="float: right;"><a href="{{ url_for('index_page') }}">トップ</a></div>
 <h2>{{ qset.title }}</h2>
 
-<table>
+<table style="clear: both;">
 {% for quiz in qset_data %}
     <tr>
     <td class="index_cell">[{{loop.index}}]</td>

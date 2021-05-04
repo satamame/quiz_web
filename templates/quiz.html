@@ -2,9 +2,9 @@
 
 {% block custom_header %}
 <style type="text/css">
-.choice {
-    margin-left: 1.5em;
-    text-indent: -1.5em;
+.radio_cell {
+    white-space: nowrap;
+    vertical-align: top;
 }
 </style>
 {% endblock %}
@@ -12,18 +12,20 @@
 {% block content %}
 <div style="float: right;"><a href="{{ url_for('index_page') }}">トップ</a></div>
 <a href="{{ url_for('qset_page', qset_idx=qset_idx) }}">{{ qset.title }}</a>
-<h3>問題 [{{ quiz_idx + 1 }}]</h3>
+
+<h3 style="clear: both;">問題 [{{ quiz_idx + 1 }}]</h3>
 <div style="margin-bottom: 10px;">{{ quiz.question }}</div>
 
 <table>
 {% for choice in quiz.choices %}
 <tr>
-    <td style="vertical-align: top;">
-        <input type="radio" id="{{ loop.index0 }}" name="choices" value="{{ loop.index0 }}">
+    <td class="radio_cell">
+        <input type="radio" id="{{ loop.index0 }}" name="choices" value="{{ loop.index0 }}"
+        ><label for="{{ loop.index0 }}"> {{ loop.index }}.</label>
     </td>
-    <td><div class="choice">
-        <label for="{{ loop.index0 }}">{{ loop.index }}. {{ choice }}</label>
-    </div></td>
+    <td>
+        <label for="{{ loop.index0 }}">{{ choice }}</label>
+    </td>
 </tr>
 {% endfor %}
 </table>
