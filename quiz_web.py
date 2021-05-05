@@ -60,19 +60,35 @@ def quiz_page(qset_idx, quiz_idx):
     # インデックスを元にクイズ集とそのデータを取得する
     qset = get_qsets()[qset_idx]
     qset_data = get_qset_data(qset.filename)
+    qcount = len(qset_data)
 
     # quiz_idx が -1 ならランダムにする
     quiz_idx = int(quiz_idx)
     if quiz_idx < 0:
-        quiz_idx = random.randint(0, len(qset_data) - 1)
+        quiz_idx = random.randint(0, qcount - 1)
 
-    # TODO: 選択肢をランダムに並べ替え、正解のインデックスをテンプレートに渡す
-
+    # quiz_idx の位置にあるクイズを取得する
     quiz = qset_data[quiz_idx]
+
+    # 選択肢が複数あるならランダムに並べ替える
+    if len(quiz.choices) >= 2:
+        choice_cnt = len(quiz.choices)
+        idxs = random.sample(range(choice_cnt), choice_cnt)
+        choices = [quiz.choices[i] for i in idxs]
+        # 正解のインデックス
+        ans_idx = idxs.index(0)
+    else:
+        # 選択肢が1個なら正解のインデックスを -1 にする
+        choices = quiz.choices
+        ans_idx = -1
+
+    # ページを返す
     title = f'Quiz Web - {qset.title} [{quiz_idx + 1}]'
     return render_template(
         'quiz.html', title=title,
-        qset_idx=qset_idx, qset=qset, quiz_idx=quiz_idx, quiz=quiz)
+        qset_idx=qset_idx, qset=qset, qcount=qcount,
+        quiz_idx=quiz_idx, quiz=quiz,
+        choices=choices, ans_idx=ans_idx)
 
 
 if __name__ == "__main__":

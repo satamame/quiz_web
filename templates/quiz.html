@@ -16,12 +16,15 @@
 <h3 style="clear: both;">問題 [{{ quiz_idx + 1 }}]</h3>
 <div style="margin-bottom: 10px;">{{ quiz.question }}</div>
 
+{# 選択肢が複数あるなら表示する #}
+{% if ans_idx >= 0 %}
+<form id="choices_form">
 <table>
-{% for choice in quiz.choices %}
+{% for choice in choices %}
 <tr>
     <td class="radio_cell">
         <input type="radio" id="{{ loop.index0 }}" name="choices" value="{{ loop.index0 }}"
-        ><label for="{{ loop.index0 }}"> {{ loop.index }}.</label>
+        onchange="hideAnswer();" /><label for="{{ loop.index0 }}"> {{ loop.index }}. </label>
     </td>
     <td>
         <label for="{{ loop.index0 }}">{{ choice }}</label>
@@ -29,4 +32,96 @@
 </tr>
 {% endfor %}
 </table>
+</form>
+{% endif %}
+
+{# ボタンエリア #}
+<div style="margin-top: 20px;">
+{% if ans_idx >= 0 %}
+<button id="check_btn" onclick="checkAnswer();">答え合わせ</button>
+{% else %}
+<button id="check_btn" onclick="showAnswer();">答えを見る</button>
+{% endif %}
+<button id="hide_btn" onclick="hideAnswer();" style="display: none;">答えを隠す</button>
+</div>
+
+{# 答え表示エリア #}
+<div id="answer_area" style="display: none; margin-top: 20px;">
+<div id="answer"></div>
+<div id="comment" style="margin-top: 10px;"></div>
+</div>
+
+{# ナビゲーションエリア #}
+<div style="margin-top: 20px;">
+<hr />
+<button id="rand_btn" onclick="goRandom();">ランダム</button>
+<button id="prev_btn" onclick="goPrev();">前の問題</button>
+<button id="next_btn" onclick="goNext();">次の問題</button>
+</div>
+
+<script>
+let choices_form = document.getElementById("choices_form");
+let check_btn = document.getElementById("check_btn");
+let hide_btn = document.getElementById("hide_btn");
+let ansArea = document.getElementById("answer_area");
+let answer = document.getElementById("answer");
+let comment = document.getElementById("comment");
+let rand_btn = document.getElementById("rand_btn");
+let prev_btn = document.getElementById("prev_btn");
+let next_btn = document.getElementById("next_btn");
+
+// 初期化
+{% if ans_idx >= 0 %}check_btn.disabled = true;{% endif %}
+{% if quiz_idx == 0 %}prev_btn.disabled = true;{% endif %}
+{% if quiz_idx == qcount - 1 %}next_btn.disabled = true;{% endif %}
+
+// 「答えを見る」を押した時の処理
+function showAnswer () {
+    answer.innerHTML = "答え：{{ quiz.choices[0] }}";
+    comment.innerHTML = "{{ quiz.comment }}";
+    ansArea.style.display = "block";
+    check_btn.style.display = "none";
+    hide_btn.style.display = "block";
+}
+
+// 「答え合わせ」を押した時の処理
+function checkAnswer () {
+    let choice_value = choices_form.choices.value;
+    if (choice_value == {{ ans_idx }}) {
+        answer.innerHTML = "<span style=\"color: green;\">[正解]</span>";
+        comment.innerHTML = "{{ quiz.comment }}";
+    } else {
+        answer.innerHTML = "<span style=\"color: red;\">[不正解]</span>";
+        comment.innerHTML = "";
+    }
+    ansArea.style.display = "block";
+    check_btn.style.display = "none";
+    hide_btn.style.display = "block";
+}
+
+// 「答えを隠す」を押した時、または選択を変えた時の処理
+function hideAnswer () {
+    answer.innerHTML = "";
+    comment.innerHTML = "";
+    ansArea.style.display = "none";
+    check_btn.style.display = "block";
+    check_btn.disabled = false;
+    hide_btn.style.display = "none";
+}
+
+// 「ランダム」を押した時の処理
+function goRandom () {
+    location.href = "{{ url_for('quiz_page', qset_idx=qset_idx, quiz_idx=-1) }}";
+}
+
+// 「前の問題」を押した時の処理
+function goPrev () {
+    location.href = "{{ url_for('quiz_page', qset_idx=qset_idx, quiz_idx=quiz_idx-1) }}";
+}
+
+// 「次の問題」を押した時の処理
+function goNext () {
+    location.href = "{{ url_for('quiz_page', qset_idx=qset_idx, quiz_idx=quiz_idx+1) }}";
+}
+</script>
 {% endblock %}
