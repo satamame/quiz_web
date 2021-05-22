@@ -2,6 +2,9 @@
 
 {% block custom_header %}
 <style type="text/css">
+h2 {
+    margin-top: 10px;
+}
 button {
     font-size: 0.8em;
 }
@@ -20,20 +23,21 @@ button {
 
 {% block content %}
 <h2>クイズ集一覧</h2>
+
 <table style="max-width: 100%;">
 {% for qset in qsets %}
     {% if not loop.first %}
         <tr><td height="5px"></td></tr>
     {% endif %}
     <tr>
-    <td style="font-weight: bold;">{{ qset.title }}</td>
+    <td style="font-weight: bold;">
+        <a href="{{ url_for('qset_page', qset_idx=loop.index0) }}">{{ qset.title }}</a>
+    </td>
     <td class="button_cell">
         <a href="{{ url_for('quiz_page', qset_idx=loop.index0, quiz_idx=0) }}">
             <button>最初から</button></a>
         <a href="{{ url_for('quiz_page', qset_idx=loop.index0, quiz_idx=-1) }}">
             <button>ランダム</button></a>
-        <a href="{{ url_for('qset_page', qset_idx=loop.index0) }}">
-            <button>リスト</button></a>
     </td>
     </tr>
     {% if qset.description %}

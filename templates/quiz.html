@@ -9,11 +9,12 @@
 </style>
 {% endblock %}
 
-{% block content %}
-<div style="float: right;"><a href="{{ url_for('index_page') }}">トップ</a></div>
-<a href="{{ url_for('qset_page', qset_idx=qset_idx) }}">{{ qset.title }}</a>
+{% block breadclumb %}
+&gt; <a href="{{ url_for('qset_page', qset_idx=qset_idx) }}">{{ qset.title }}</a>
+{% endblock %}
 
-<h3 style="clear: both;">問題 [{{ quiz_idx + 1 }}]</h3>
+{% block content %}
+<h3>問題 [{{ quiz_idx + 1 }}]</h3>
 <div style="margin-bottom: 10px;">{{ quiz.question }}</div>
 
 {# 選択肢が複数あるなら表示する #}

@@ -2,6 +2,9 @@
 
 {% block custom_header %}
 <style type="text/css">
+h2 {
+    margin-top: 10px;
+}
 .index_cell {
     white-space: nowrap;
     vertical-align: top;
@@ -10,10 +13,9 @@
 {% endblock %}
 
 {% block content %}
-<div style="float: right;"><a href="{{ url_for('index_page') }}">トップ</a></div>
 <h2>{{ qset.title }}</h2>
 
-<table style="clear: both;">
+<table>
 {% for quiz in qset_data %}
     <tr>
     <td class="index_cell">[{{loop.index}}]</td>
