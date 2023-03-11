@@ -8,7 +8,7 @@
 
 ## デモ
 
-- 動作デモは[こちら](https://honmono.no-ip.biz/quiz_web/)
+- 動作デモは[こちら](https://satamame.ddns.me:5380/quiz_web/)
     - Ubuntu 18.04.5
     - Apache 2.4.29
     - Python 3.8.0
